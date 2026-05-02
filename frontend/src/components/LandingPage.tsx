@@ -1,4 +1,5 @@
-import { Shield, Lock, Zap, Eye } from 'lucide-react';
+import { useState } from 'react';
+import { Shield, Lock, Zap, Eye, CheckCircle, X, Loader2 } from 'lucide-react';
 
 interface Props {
   onEnter: () => void;
@@ -42,7 +43,91 @@ const techPills = [
   'Zero-Knowledge Proofs',
 ];
 
+type ModalStep = 'idle' | 'scanning' | 'verified';
+
+function WorldIDModal({ onClose, onVerified }: { onClose: () => void; onVerified: () => void }) {
+  const [step, setStep] = useState<ModalStep>('idle');
+
+  function startScan() {
+    setStep('scanning');
+    setTimeout(() => {
+      setStep('verified');
+      setTimeout(() => {
+        onVerified();
+        onClose();
+      }, 900);
+    }, 2200);
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+      <div className="relative w-full max-w-sm mx-4 rounded-2xl border border-gray-700 bg-gray-900 p-8 shadow-2xl text-center">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-600 hover:text-gray-300"
+        >
+          <X size={16} />
+        </button>
+
+        {/* World ID logo-ish orb */}
+        <div className="flex justify-center mb-5">
+          <div className="w-16 h-16 rounded-full border-2 border-blue-500 bg-blue-900/30 flex items-center justify-center">
+            {step === 'scanning' && (
+              <Loader2 size={28} className="text-blue-400 animate-spin" />
+            )}
+            {step === 'verified' && (
+              <CheckCircle size={28} className="text-green-400" />
+            )}
+            {step === 'idle' && (
+              <span className="text-2xl font-black text-blue-300">W</span>
+            )}
+          </div>
+        </div>
+
+        <h3 className="text-base font-bold text-white mb-1">
+          {step === 'idle'    && 'Verify with World ID'}
+          {step === 'scanning' && 'Scanning iris…'}
+          {step === 'verified' && 'Identity Verified!'}
+        </h3>
+        <p className="text-xs text-gray-500 mb-6">
+          {step === 'idle'    && "Prove you're a unique human. No personal data shared."}
+          {step === 'scanning' && 'Hold still — generating zero-knowledge proof…'}
+          {step === 'verified' && 'ZK proof accepted. One human, one agent.'}
+        </p>
+
+        {step === 'idle' && (
+          <button
+            onClick={startScan}
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-lg transition-colors"
+          >
+            Scan Iris (Demo)
+          </button>
+        )}
+
+        {step === 'scanning' && (
+          <div className="w-full h-2 rounded-full bg-gray-800 overflow-hidden">
+            <div className="h-full bg-blue-500 rounded-full animate-pulse" style={{ width: '60%' }} />
+          </div>
+        )}
+
+        {step === 'verified' && (
+          <div className="text-xs text-green-400 font-mono bg-green-900/20 border border-green-800 rounded-lg px-3 py-2">
+            nullifier_hash: 0x{Math.random().toString(16).slice(2, 18)}…
+          </div>
+        )}
+
+        <p className="mt-4 text-xs text-gray-700">
+          Powered by Worldcoin · Real orb verification coming soon
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function LandingPage({ onEnter }: Props) {
+  const [verified, setVerified]     = useState(false);
+  const [showModal, setShowModal]   = useState(false);
+
   return (
     <div className="min-h-screen grid-bg flex flex-col">
       {/* Nav */}
@@ -100,12 +185,19 @@ export function LandingPage({ onEnter }: Props) {
 
         {/* CTA */}
         <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <button
-            onClick={onEnter}
-            className="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 px-8 py-3 rounded-lg font-bold text-white transition-colors shadow-lg shadow-blue-900/40"
-          >
-            Connect World ID
-          </button>
+          {verified ? (
+            <span className="flex items-center gap-2 bg-green-900/30 border border-green-700 text-green-300 px-8 py-3 rounded-lg font-bold">
+              <CheckCircle size={16} />
+              Verified — entering dashboard…
+            </span>
+          ) : (
+            <button
+              onClick={() => setShowModal(true)}
+              className="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 px-8 py-3 rounded-lg font-bold text-white transition-colors shadow-lg shadow-blue-900/40"
+            >
+              Connect World ID
+            </button>
+          )}
           <button
             onClick={onEnter}
             className="border border-gray-700 hover:border-gray-500 px-8 py-3 rounded-lg font-semibold text-gray-300 hover:text-white transition-colors"
@@ -116,7 +208,7 @@ export function LandingPage({ onEnter }: Props) {
 
         {/* Disclaimer */}
         <p className="mt-6 text-xs text-gray-700">
-          World ID verification coming soon — dashboard is open for demo
+          World ID orb verification · dashboard also open for demo
         </p>
       </header>
 
@@ -141,6 +233,17 @@ export function LandingPage({ onEnter }: Props) {
       <footer className="text-center py-8 border-t border-gray-800 text-gray-600 text-xs">
         Built for NEAR &amp; Worldcoin Hackathons 2026 &nbsp;·&nbsp; On-chain Security Guardian MVP v0.1
       </footer>
+
+      {/* World ID Modal */}
+      {showModal && (
+        <WorldIDModal
+          onClose={() => setShowModal(false)}
+          onVerified={() => {
+            setVerified(true);
+            setTimeout(onEnter, 800);
+          }}
+        />
+      )}
     </div>
   );
 }
