@@ -6,7 +6,8 @@ import App from './App';
 import { LoveEarnApp } from './love/LoveEarnApp';
 
 const path = window.location.pathname;
-const RootApp = path.startsWith('/guardian') ? App : LoveEarnApp;
+// Works under /ML/ (GitHub Pages) and / (local dev)
+const RootApp = path.includes('/guardian') ? App : LoveEarnApp;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
