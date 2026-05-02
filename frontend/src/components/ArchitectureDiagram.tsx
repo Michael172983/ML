@@ -9,9 +9,16 @@ export function ArchitectureDiagram() {
       </div>
 
       <div className="overflow-x-auto">
-        <div className="min-w-[640px]">
-          {/* Top Row */}
-          <div className="grid grid-cols-3 gap-3 mb-3">
+        <div className="min-w-[680px]">
+
+          {/* Row 0 — Identity + UI */}
+          <div className="grid grid-cols-4 gap-3 mb-3">
+            {/* World ID */}
+            <div className="rounded-lg border border-purple-800 bg-purple-900/20 p-3 text-center">
+              <div className="text-lg mb-1">🌐</div>
+              <p className="text-xs font-bold text-purple-300">World ID</p>
+              <p className="text-xs text-gray-500 mt-0.5">Human Verification</p>
+            </div>
             {/* Wallet */}
             <div className="rounded-lg border border-blue-800 bg-blue-900/20 p-3 text-center">
               <div className="text-lg mb-1">👛</div>
@@ -19,9 +26,9 @@ export function ArchitectureDiagram() {
               <p className="text-xs text-gray-500 mt-0.5">wagmi + RainbowKit</p>
             </div>
             {/* Frontend */}
-            <div className="rounded-lg border border-purple-800 bg-purple-900/20 p-3 text-center">
+            <div className="rounded-lg border border-indigo-800 bg-indigo-900/20 p-3 text-center">
               <div className="text-lg mb-1">🖥️</div>
-              <p className="text-xs font-bold text-purple-300">React Dashboard</p>
+              <p className="text-xs font-bold text-indigo-300">React Dashboard</p>
               <p className="text-xs text-gray-500 mt-0.5">Tailwind + Lucide</p>
             </div>
             {/* Blockchain */}
@@ -33,7 +40,10 @@ export function ArchitectureDiagram() {
           </div>
 
           {/* Arrows Row 1 */}
-          <div className="grid grid-cols-3 gap-3 mb-3">
+          <div className="grid grid-cols-4 gap-3 mb-3">
+            <div className="flex justify-center">
+              <Arrow label="ZK Proof" />
+            </div>
             <div className="flex justify-center">
               <Arrow label="WalletConnect" />
             </div>
@@ -45,8 +55,8 @@ export function ArchitectureDiagram() {
             </div>
           </div>
 
-          {/* Middle Row */}
-          <div className="grid grid-cols-3 gap-3 mb-3">
+          {/* Middle Row — Core Agent */}
+          <div className="grid grid-cols-4 gap-3 mb-3">
             {/* Config */}
             <div className="rounded-lg border border-gray-700 bg-gray-800/40 p-3 text-center">
               <div className="text-lg mb-1">⚙️</div>
@@ -54,10 +64,10 @@ export function ArchitectureDiagram() {
               <p className="text-xs text-gray-500 mt-0.5">Wallet · Chain · Threshold</p>
             </div>
             {/* Backend Agent */}
-            <div className="rounded-lg border border-green-700 bg-green-900/20 p-3 text-center col-span-1">
+            <div className="rounded-lg border border-green-700 bg-green-900/20 p-3 text-center col-span-2">
               <div className="text-lg mb-1">🛡️</div>
-              <p className="text-xs font-bold text-green-300">Security Guardian</p>
-              <p className="text-xs text-gray-500 mt-0.5">Node.js / TypeScript</p>
+              <p className="text-xs font-bold text-green-300">Security Guardian Agent</p>
+              <p className="text-xs text-gray-500 mt-0.5">Node.js / TypeScript · OpenClaw Local LLM</p>
             </div>
             {/* Mempool Monitor */}
             <div className="rounded-lg border border-yellow-800 bg-yellow-900/20 p-3 text-center">
@@ -68,10 +78,13 @@ export function ArchitectureDiagram() {
           </div>
 
           {/* Arrows Row 2 */}
-          <div className="grid grid-cols-3 gap-3 mb-3">
+          <div className="grid grid-cols-4 gap-3 mb-3">
             <div />
             <div className="flex justify-center">
               <Arrow label="Threat Event" />
+            </div>
+            <div className="flex justify-center">
+              <Arrow label="Confidential Intent" />
             </div>
             <div className="flex justify-center">
               <Arrow label="Raw Tx Data" dir="up" />
@@ -79,13 +92,19 @@ export function ArchitectureDiagram() {
           </div>
 
           {/* Bottom Row */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-4 gap-3">
             <div />
             {/* AI Analyzer */}
             <div className="rounded-lg border border-pink-800 bg-pink-900/20 p-3 text-center">
               <div className="text-lg mb-1">🤖</div>
               <p className="text-xs font-bold text-pink-300">AI Analyzer</p>
               <p className="text-xs text-gray-500 mt-0.5">Claude / GPT-4o</p>
+            </div>
+            {/* NEAR Confidential Intents */}
+            <div className="rounded-lg border border-teal-800 bg-teal-900/20 p-3 text-center">
+              <div className="text-lg mb-1">🔒</div>
+              <p className="text-xs font-bold text-teal-300">NEAR Confidential</p>
+              <p className="text-xs text-gray-500 mt-0.5">Stealth Execution</p>
             </div>
             {/* Evacuation */}
             <div className="rounded-lg border border-orange-800 bg-orange-900/20 p-3 text-center">
@@ -94,19 +113,22 @@ export function ArchitectureDiagram() {
               <p className="text-xs text-gray-500 mt-0.5">Frontrun + Transfer</p>
             </div>
           </div>
+
         </div>
       </div>
 
       {/* Legend */}
-      <div className="mt-5 pt-4 border-t border-gray-800 grid grid-cols-2 gap-2">
+      <div className="mt-5 pt-4 border-t border-gray-800 grid grid-cols-2 sm:grid-cols-3 gap-2">
         {[
+          { color: 'bg-purple-500', label: 'World ID · Identity' },
           { color: 'bg-blue-500',   label: 'User Interface Layer' },
           { color: 'bg-green-500',  label: 'Guardian Agent Core' },
           { color: 'bg-yellow-500', label: 'Blockchain Interface' },
+          { color: 'bg-teal-500',   label: 'NEAR Confidential Intents' },
           { color: 'bg-pink-500',   label: 'AI Analysis Engine' },
         ].map(({ color, label }) => (
           <div key={label} className="flex items-center gap-2">
-            <span className={`w-2 h-2 rounded-full ${color}`} />
+            <span className={`w-2 h-2 rounded-full ${color} shrink-0`} />
             <span className="text-xs text-gray-500">{label}</span>
           </div>
         ))}

@@ -10,11 +10,13 @@ import { GuardianConfig } from './components/GuardianConfig';
 import { ThreatFeed } from './components/ThreatFeed';
 import { DemoPanel } from './components/DemoPanel';
 import { ArchitectureDiagram } from './components/ArchitectureDiagram';
+import { LandingPage } from './components/LandingPage';
 import type { ThreatEvent, EvacuationSimulation, GuardianStatus } from './types';
 
 const queryClient = new QueryClient();
 
 function GuardianApp() {
+  const [showLanding, setShowLanding] = useState(true);
   const [status, setStatus]         = useState<GuardianStatus | null>(null);
   const [threats, setThreats]       = useState<ThreatEvent[]>([]);
   const [, setEvacuations]          = useState<EvacuationSimulation[]>([]);
@@ -40,6 +42,10 @@ function GuardianApp() {
     },
   });
 
+  if (showLanding) {
+    return <LandingPage onEnter={() => setShowLanding(false)} />;
+  }
+
   return (
     <div className="min-h-screen grid-bg">
       {/* Notification Toast Stack */}
@@ -58,13 +64,18 @@ function GuardianApp() {
       {/* Header */}
       <header className="border-b border-gray-800 bg-gray-950/80 backdrop-blur sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Shield size={22} className="text-green-400" fill="rgba(34,197,94,0.15)" />
-            <div>
-              <span className="text-sm font-bold text-white tracking-tight">On-chain Security Guardian</span>
+          <button
+            onClick={() => setShowLanding(true)}
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+          >
+            <Shield size={22} className="text-cyan-400" fill="rgba(34,211,238,0.15)" />
+            <div className="text-left">
+              <span className="text-sm font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent tracking-tight">
+                On-chain Security Guardian
+              </span>
               <span className="ml-2 text-xs text-gray-600">MVP v0.1</span>
             </div>
-          </div>
+          </button>
           <div className="flex items-center gap-3">
             {threats.length > 0 && (
               <span className="flex items-center gap-1.5 text-xs text-red-400 bg-red-900/20 border border-red-800 rounded-full px-2.5 py-1">
@@ -104,7 +115,7 @@ function GuardianApp() {
 
       {/* Footer */}
       <footer className="border-t border-gray-800 mt-12 py-4 text-center text-xs text-gray-700">
-        On-chain Security Guardian MVP · Built with React, TypeScript, viem, wagmi, OpenAI/Anthropic
+        On-chain Security Guardian MVP · NEAR Protocol · World ID · OpenClaw · Built with React, TypeScript, viem, wagmi
       </footer>
     </div>
   );
